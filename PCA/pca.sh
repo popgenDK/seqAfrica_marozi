@@ -1,0 +1,19 @@
+#!/bin/bash
+
+ANGSD=~/Software/angsd/angsd
+bamlist=/maps/projects/seqafrica/people/pls394/marozi/wildlions_map2Pleo.bamlist
+out=wildlion
+chrlist=/maps/projects/seqafrica/people/pls394/marozi/site_filters/good_auto_exclRep_exclDepth.chr
+site=/maps/projects/seqafrica/people/pls394/marozi/site_filters/good_auto_exclRep_exclDepth.sites
+
+## generate GL
+$ANGSD  -bam $bamlist -minMapQ 30 -minQ 30 -GL 2  -doMajorMinor 1 -doMaf 1 -SNP_pval 1e-6 -minInd 10  -minMaf 0.05 -doGlf 2  -P 5 -rf $chrlist -sites $site -out $out
+
+## extract GL only at transversions
+zcat wildlion.beagle.gz | awk -F '\t' '!( ($2 == "0" && $3 == "2") || ($2 == "2" && $3 == "0") || ($2 == "1" && $3 == "3") || ($2 == "3" && $3 == "1") )'    > wildlion.transversion.beagle
+gzip wildlion.transversion.beagle
+
+## run PCAangsd
+python3 ~/Software/pcangsd-v.0.99/pcangsd.py  -b wildlion.transversion.beagle.gz -threads 10 -iter 1000 -o wild_transversion
+
+
