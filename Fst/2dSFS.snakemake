@@ -1,0 +1,44 @@
+import re
+import os
+
+
+FA="/maps/projects/seqafrica/people/pls394/marozi/Outgroup/cloudleop.fa.gz"
+OUTMAIN="/projects/seqafrica/people/pls394/marozi/SFS/results"
+MY_SITES="/maps/projects/seqafrica/people/pls394/marozi/site_filters/good_auto_exclRep_exclDepth.sites"
+bamlist = "/maps/projects/seqafrica/people/pls394/marozi/cats_map2Pleo.bamlist"
+with open(bamlist) as f:
+    BAMS = f.read().splitlines()
+
+SAMPLES = [ re.sub(".Pleo.bam","", os.path.basename(i)) for i in BAMS]
+BAM_DIR = "/projects/seqafrica/people/zlc187/mapping/cats/batch_1"
+
+
+
+ANGSD="/home/pls394/Software/angsd/angsd"
+BASEQ=20
+MAPQ=20
+
+rule all:
+     input:
+        expand( os.path.join(OUTMAIN, "safs","{s}.saf.idx"), s=SAMPLES),
+        expand( os.path.join(OUTMAIN, "safs", "{s}.saf.gz"),s=SAMPLES),
+        expand( os.path.join(OUTMAIN, "safs", "{s}.saf.pos.gz"),s=SAMPLES),
+        expand( os.path.join(OUTMAIN, "safs", "{s}.arg"), s=SAMPLES)
+
+
+
+rule prepare_saf:
+      input:
+           bam = os.path.join(BAM_DIR, "{s}.Pleo.bam")
+      output:
+           saf_idx = os.path.join(OUTMAIN,  "safs","{s}.saf.idx"),
+           saf = os.path.join(OUTMAIN,  "safs", "{s}.saf.gz"),
+           saf_pos = os.path.join(OUTMAIN,  "safs", "{s}.saf.pos.gz"),
+           arg = os.path.join(OUTMAIN,  "safs", "{s}.arg")
+      params:
+           outbase = lambda wildcards, output: output.saf_idx.replace(".saf.idx", "")
+      threads: 2
+      log:
+           os.path.join(OUTMAIN,  "safs", "{s}.log")
+      shell:
+           "{ANGSD}  -P {threads} -i {input.bam} -out {params.outbase} -minMapQ {MAPQ} -minQ {BASEQ} -dosaf 1 -noTrans 0 -sites {MY_SITES} -anc {FA} -GL 2  2> {log}"
