@@ -1,0 +1,1 @@
+samtools tview -p NC_056692.1:41218945  /projects/seqafrica/data/mapping/cats/batch_1/Marozi.Pleo.bam  /maps/projects/seqafrica/data/Marozi_data_2024/Reference/lion/GCF_018350215.1/GCF_018350215.1_P.leo_Ple1_pat1.1_genomic.fna

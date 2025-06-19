@@ -1,9 +1,9 @@
 ingroup: Bigcat
 results_subdir: Bigcat
 ref:
-  name: Pleo2
-  fa: /projects/seqafrica/scratch/xiaodong/marozi_newmapping/genomes/Panthera_leo_krugeri_HiC.fasta
-  fai: /projects/seqafrica/scratch/xiaodong/marozi_newmapping/genomes/Panthera_leo_krugeri.fasta_HiC.fasta.fai
+  name: Pleo
+  fa: /maps/projects/seqafrica/data/Marozi_data_2024/Reference/lion/GCF_018350215.1/GCF_018350215.1_P.leo_Ple1_pat1.1_genomic.fna
+  fai: /maps/projects/seqafrica/data/Marozi_data_2024/Reference/lion/GCF_018350215.1/GCF_018350215.1_P.leo_Ple1_pat1.1_genomic.fna.fai
 sites: /maps/projects/seqafrica/people/pls394/marozi/GT/Panthera_leo_krugeri_HiC.bed
 tsv: tsvs/cats_coatColor.tsv
 populations: tsvs/cats_coatColor.populations
